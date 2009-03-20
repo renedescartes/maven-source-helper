@@ -40,11 +40,12 @@ public abstract class CommonUtil {
 
     public static void assertTrue(boolean condition, String message) {
         if (!condition) {
-            throw new IllegalArgumentException(message);
+            throw new DownloadException(message);
         }
     }
     
     public static boolean isValidUrl(String location) {
+    	assertTrue(!isEmpty(location), "The location cannot be empty");
 		InputStream stream = null;
 		try {
 			URL url = new URL(location);
@@ -63,6 +64,7 @@ public abstract class CommonUtil {
 	}
 
     public static boolean isValidDirectory(String location) {
+    	assertTrue(!isEmpty(location), "The location cannot be empty");
     	try {
     		return new File(location).isDirectory();
     	} catch (Exception e) {

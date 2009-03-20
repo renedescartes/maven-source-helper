@@ -1,14 +1,15 @@
 package com.ekanathk.maven.gui;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
 
 import com.ekanathk.maven.core.Artifact;
 import com.ekanathk.maven.core.SourceDownload;
@@ -25,16 +26,7 @@ public class DownloadFrame extends JFrame implements ActionListener {
 	public DownloadFrame() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(900, 600);
-        this.setLayout(new BorderLayout());
-        JPanel panel = new JPanel(new GridLayout(3,2));
-		this.add(panel, BorderLayout.NORTH);
-		
-		panel.add(new JLabel("Group Id"));
-        panel.add(groupId);
-        panel.add(new JLabel("Artifact Id"));
-        panel.add(artifactId);
-        panel.add(new JLabel("Version"));
-        panel.add(version);
+        this.add(new ArtifactDialog(), BorderLayout.CENTER);
         this.add(download, BorderLayout.SOUTH);
         download.addActionListener(this);
         this.pack();
