@@ -42,6 +42,7 @@ public class ArtifactDialog extends JPanel {
 		constraints.anchor = GridBagConstraints.WEST;
 		gridbag.setConstraints(textField, constraints);
 		this.add(textField);
+		
 		return textField;
 	}
 	
