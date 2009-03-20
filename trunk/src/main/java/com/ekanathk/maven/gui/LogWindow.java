@@ -6,9 +6,7 @@ import java.util.logging.ErrorManager;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
 public class LogWindow extends JFrame {
 	private JTextArea textArea = null;
@@ -22,7 +20,9 @@ public class LogWindow extends JFrame {
 	public LogWindow(String title, int width, int height) {
 		super(title);
 		setSize(width, height);
-		textArea = new JTextArea();
+		textArea = new JTextArea(5, 40);
+		textArea.setLineWrap(true);
+		textArea.setEditable(false);
 		pane = new JScrollPane(textArea);
 		getContentPane().add(pane);
 		setVisible(true);
@@ -34,9 +34,13 @@ public class LogWindow extends JFrame {
 		return handler;
 	}
 
-	public void showInfo(String data) {
-		textArea.append(data + LINE_SEPERATOR);
-		this.getContentPane().validate();
+	public void showInfo(final String data) {
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run() {
+				textArea.append(data + LINE_SEPERATOR + LINE_SEPERATOR);
+				getContentPane().validate();
+			}
+		});
 	}
 }
 
