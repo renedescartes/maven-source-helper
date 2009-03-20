@@ -51,6 +51,9 @@ public class SourceDownload {
 	}
 
 	public boolean attemptDownload(Artifact artifact) throws IOException {
+		assertTrue(!isEmpty(artifact.getGroupId()), "The group id cannot be empty");
+		assertTrue(!isEmpty(artifact.getArtifactId()), "The artifact id cannot be empty");
+		assertTrue(!isEmpty(artifact.getVersion()), "The version cannot be empty");
 		String groupId = artifact.getGroupId().replace('.', '/');
 		String fileName = MessageFormat.format(
 				"/{0}/{1}/{2}/{1}-{2}-sources.jar", groupId, artifact
@@ -68,7 +71,9 @@ public class SourceDownload {
 				copyPaths(jarUrl, localUrl);
 				return true;
 			}
+			log.info("The source jar is not found at [" + jarUrl + "]");
 		}
+		log.info("None of the repositories " + repositoryList + "contains a source artifact for [" + artifact + "]");
 		return false;
 	}
 
