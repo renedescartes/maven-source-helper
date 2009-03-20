@@ -6,8 +6,6 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -15,39 +13,24 @@ public class SourceDownload {
 	private static final Logger log = Logger.getLogger(SourceDownload.class
 			.getName());
 
-	private static MavenDefaults mavenDefaults = new MavenDefaults();
+	private MavenSettings mavenSettings;
 
-	private List<String> repositoryList;
-
-	private String localRepositoryPath;
-
-	public SourceDownload() {
-		this(mavenDefaults.getStandardRepoList());
-	}
-	
-	public SourceDownload(String... repositories) {
-		this(Arrays.asList(repositories));
-	}
-
-	public SourceDownload(List<String> repositories) {
-		this(repositories, mavenDefaults.getStandardLocalRepositoryPath());
-	}
-
-	public SourceDownload(List<String> repositories, String localRepositoryPath) {
+	public SourceDownload(MavenSettings mavenSettings) {
+		String localRepositoryPath = mavenSettings.getLocalRepositoryPath();
+		List<String> repositoryList = mavenSettings.getRepositoryList();
 		assertTrue(!isEmpty(localRepositoryPath),
 				"The local repository path cannot be null or empty");
-		assertNotNull(repositories, "The repositories cannot be null");
-		assertTrue(!repositories.isEmpty(),
+		assertNotNull(repositoryList, "The repositories cannot be null");
+		assertTrue(!repositoryList.isEmpty(),
 				"The repository list cannot be empty");
-		for (String s : repositories) {
+		for (String s : repositoryList) {
 			assertTrue(isValidUrl(s), "One of the repositories at [" + s
 					+ "] is not a valid url");
 		}
 		assertTrue(isValidDirectory(localRepositoryPath),
 				"The local repository path at [" + localRepositoryPath
 						+ "] is not a valid directory");
-		this.repositoryList = Collections.unmodifiableList(repositories);
-		this.localRepositoryPath = localRepositoryPath;
+		this.mavenSettings = mavenSettings;
 	}
 
 	public boolean attemptDownload(Artifact artifact) {
@@ -58,26 +41,26 @@ public class SourceDownload {
 		String fileName = MessageFormat.format(
 				"/{0}/{1}/{2}/{1}-{2}-sources.jar", groupId, artifact
 						.getArtifactId(), artifact.getVersion());
-		for (String repo : repositoryList) {
+		for (String repo : mavenSettings.getRepositoryList()) {
 			String jarUrl = repo + fileName;
 			log.info("Attempting to download [" + jarUrl + "]");
 			if (isValidUrl(jarUrl)) {
-				String localUrl = localRepositoryPath + fileName;
+				String localUrl = mavenSettings.getLocalRepositoryPath() + fileName;
 				File file = new File(localUrl);
 				if (file.exists()) {
 					file.delete();
 				}
+				file.getParentFile().mkdirs();
 				try {
-					file.createNewFile();
 					copyPaths(jarUrl, localUrl);
 				} catch (IOException e) {
-					throw new DownloadException("IO error while copying files", e);
+					throw new DownloadException("Could not copy [" + jarUrl + "] to [" + localUrl + "]");
 				}
 				return true;
 			}
 			log.info("The source jar is not found at [" + jarUrl + "]");
 		}
-		log.info("None of the repositories " + repositoryList + "contains a source artifact for [" + artifact + "]");
+		log.info("None of the repositories " + mavenSettings.getRepositoryList() + "contains a source artifact for [" + artifact + "]");
 		return false;
 	}
 
