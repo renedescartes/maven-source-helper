@@ -50,7 +50,7 @@ public class SourceDownload {
 		this.localRepositoryPath = localRepositoryPath;
 	}
 
-	public boolean attemptDownload(Artifact artifact) throws IOException {
+	public boolean attemptDownload(Artifact artifact) {
 		assertTrue(!isEmpty(artifact.getGroupId()), "The group id cannot be empty");
 		assertTrue(!isEmpty(artifact.getArtifactId()), "The artifact id cannot be empty");
 		assertTrue(!isEmpty(artifact.getVersion()), "The version cannot be empty");
@@ -67,8 +67,12 @@ public class SourceDownload {
 				if (file.exists()) {
 					file.delete();
 				}
-				file.createNewFile();
-				copyPaths(jarUrl, localUrl);
+				try {
+					file.createNewFile();
+					copyPaths(jarUrl, localUrl);
+				} catch (IOException e) {
+					throw new DownloadException("IO error while copying files", e);
+				}
 				return true;
 			}
 			log.info("The source jar is not found at [" + jarUrl + "]");
