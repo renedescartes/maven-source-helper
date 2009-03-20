@@ -4,9 +4,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import com.ekanathk.maven.core.Artifact;
 
@@ -24,6 +22,8 @@ public class ArtifactDialog extends JPanel {
 		group = addInputField(gridbag, constraints, "Group Id", "commons-lang");
 		artifact = addInputField(gridbag, constraints, "Artifact Id", "commons-lang");
 		version = addInputField(gridbag, constraints, "Version", "2.4");
+		
+		setBorder(BorderFactory.createTitledBorder("Specify Artifact"));
 	}
 
 	private final JTextField addInputField(GridBagLayout gridbag,
