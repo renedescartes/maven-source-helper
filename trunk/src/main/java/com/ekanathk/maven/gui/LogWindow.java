@@ -60,7 +60,6 @@ class WindowHandler extends Handler {
 		} catch (Exception ex) {
 			reportError(null, ex, ErrorManager.WRITE_FAILURE);
 		}
-
 	}
 
 	public void close() {

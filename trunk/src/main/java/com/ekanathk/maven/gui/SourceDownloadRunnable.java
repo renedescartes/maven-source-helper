@@ -16,7 +16,12 @@ class SourceDownloadRunnable implements Runnable {
 
 	public void run() {
 		SourceDownload.getLog().addHandler(logWindow.getHandler());
-		sourceDownload.attemptDownload(artifact);
+		try {
+			sourceDownload.attemptDownload(artifact);
+		} catch(Exception ex) {
+			logWindow.showInfo("Error while downloading/copying - " + ex.getMessage());
+			throw new RuntimeException(ex);
+		}
 		SourceDownload.getLog().removeHandler(logWindow.getHandler());
 	}
 }
