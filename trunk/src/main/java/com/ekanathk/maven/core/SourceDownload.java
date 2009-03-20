@@ -86,4 +86,8 @@ public class SourceDownload {
 		closeQuietly(is, os);
 		log.info("Copied successfully");
 	}
+
+	public static Logger getLog() {
+		return log;
+	}
 }
