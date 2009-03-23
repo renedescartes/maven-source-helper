@@ -3,9 +3,7 @@ package com.ekanathk.maven.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -21,7 +19,7 @@ public class RepoListDialog extends JPanel implements ListSelectionListener {
     private JButton removeButton;
     private JTextField repoLocation;
 
-    public RepoListDialog(List<String> repoList) {
+    public RepoListDialog(String[] repoList) {
         super(new BorderLayout());
         this.setBorder(BorderFactory.createTitledBorder("List of Remote Repositories"));
         listModel = new DefaultListModel();
@@ -67,13 +65,13 @@ public class RepoListDialog extends JPanel implements ListSelectionListener {
         add(buttonPane, BorderLayout.PAGE_END);
     }
 
-    public List<String> getListData() {
+    public String[] getListData() {
     	List<String> data = new ArrayList<String>();
     	Enumeration<?> iter = listModel.elements();
     	while(iter.hasMoreElements()) {
     		data.add(iter.nextElement().toString());
     	}
-    	return data;
+    	return data.toArray(new String[data.size()]);
     }
     
     class RemoveListener implements ActionListener {
@@ -112,7 +110,7 @@ public class RepoListDialog extends JPanel implements ListSelectionListener {
 
         //Required by ActionListener.
         public void actionPerformed(ActionEvent e) {
-            String name = repoLocation.getText();
+            String name = repoLocation.getText().trim();
 
             //User didn't type in a unique name...
             if (CommonUtil.isEmpty(name) || alreadyInList(name)) {
@@ -129,7 +127,7 @@ public class RepoListDialog extends JPanel implements ListSelectionListener {
                 index++;
             }
 
-            listModel.insertElementAt(repoLocation.getText(), index);
+            listModel.insertElementAt(name, index);
             //If we just wanted to add to the end, we'd do this:
             //listModel.addElement(repoLocation.getText());
 
@@ -146,7 +144,13 @@ public class RepoListDialog extends JPanel implements ListSelectionListener {
         //get more sophisticated about the algorithm.  For example,
         //you might want to ignore white space and capitalization.
         protected boolean alreadyInList(String name) {
-        	return getListData().contains(name);
+        	String[] data = getListData();
+        	for(String s : data) {
+        		if(s.equalsIgnoreCase(name)) {
+        			return true;
+        		}
+        	}
+        	return false;
         }
 
         //Required by DocumentListener.
