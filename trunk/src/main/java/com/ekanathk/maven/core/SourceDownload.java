@@ -6,7 +6,6 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
-import java.util.List;
 import java.util.logging.Logger;
 
 public class SourceDownload {
@@ -17,11 +16,11 @@ public class SourceDownload {
 
 	public SourceDownload(MavenSettings mavenSettings) {
 		String localRepositoryPath = mavenSettings.getLocalRepositoryPath();
-		List<String> repositoryList = mavenSettings.getRepositoryList();
+		String[] repositoryList = mavenSettings.getRepositoryList();
 		assertTrue(!isEmpty(localRepositoryPath),
 				"The local repository path cannot be null or empty");
 		assertNotNull(repositoryList, "The repositories cannot be null");
-		assertTrue(!repositoryList.isEmpty(),
+		assertTrue(repositoryList.length > 0,
 				"The repository list cannot be empty");
 		for (String s : repositoryList) {
 			assertTrue(isValidUrl(s), "One of the repositories at [" + s
