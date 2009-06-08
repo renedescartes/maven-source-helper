@@ -21,6 +21,13 @@
 			<timezone>GMT</timezone>
 		</developer>
 	</developers>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>mindtree</id>
+			<name>mindtree</name>
+			<url>http://mindtreeinsight.svn.sourceforge.net/svnroot/mindtreeinsight/maven-repo/trunk/release/</url>
+		</pluginRepository>
+	</pluginRepositories>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -50,6 +57,29 @@
 				<configuration>
 					<source>1.5</source>
 					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.mindtree.techworks.insight.releng</groupId>
+				<artifactId>maven-jsmooth-plugin</artifactId>
+				<version>0.2.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jsmoothcompile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<jsmoothFile>
+						src/main/resources/exe-gen.jsmooth
+					</jsmoothFile>
+					<iconLocation>
+						src/main/resources/m2.png
+					</iconLocation>
+					<setExeName>true</setExeName>
+					<includeDependencies>true</includeDependencies>
 				</configuration>
 			</plugin>
 		</plugins>
