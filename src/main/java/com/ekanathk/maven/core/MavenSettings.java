@@ -1,6 +1,9 @@
 package com.ekanathk.maven.core;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
+
+import static com.ekanathk.maven.core.IOUtil.*;
 
 public class MavenSettings {
 
@@ -16,7 +19,7 @@ public class MavenSettings {
 
 	private String localRepositoryPath;
 	private String[] repositoryList;
-	
+	private static final String STRING_FORMAT = "localRepositoryPath~[{0}]~repositoryList~{1}";
 	public MavenSettings() {
 		this(STANDARD_MAVEN_REPO, STANDARD_REPO_LIST);
 	}
@@ -35,5 +38,13 @@ public class MavenSettings {
 	}
 	public void setRepositoryList(String[] repositoryList) {
 		this.repositoryList = repositoryList;
+	}
+	public synchronized void saveConfig() {
+		writeToFile(MessageFormat.format(STRING_FORMAT, localRepositoryPath, Arrays.toString(repositoryList)), "MavenSettings.xml");
+	}
+	public static synchronized MavenSettings readConfig() {
+		String[] content = readFromFile("MavenSettings.xml").split("~");
+		String[] repoList = content[3].split(",");
+		return new MavenSettings(content[1], repoList);
 	}
 }
