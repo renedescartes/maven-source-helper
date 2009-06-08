@@ -23,7 +23,8 @@ public class DownloadFrame extends JFrame implements ActionListener {
 			.getRepositoryList());
 	private static SavedClass<MavenSettings> savedClass = new SavedClass<MavenSettings>(MavenSettings.class);
 	private static MavenSettings mavenSettings = savedClass.readObject();
-
+	private JTextArea progressArea = new JTextArea(15, 80);
+	
 	public DownloadFrame() {
 		super("Maven source downloader application");
 		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
@@ -33,8 +34,8 @@ public class DownloadFrame extends JFrame implements ActionListener {
 		this.add(Box.createVerticalStrut(15));
 		addLocalRepoPanel();
 		addRemoteRepoList();
-		this.add(download);
-		download.addActionListener(this);
+		addProgressDisplayArea();
+		addDownloadButton();
 		this.pack();
 		this.setVisible(true);
 		centerComponentOnScreen(this);
@@ -46,7 +47,7 @@ public class DownloadFrame extends JFrame implements ActionListener {
 			mavenSettings.setRepositoryList(repoListDialog.getListData());
 			SourceDownload s = new SourceDownload(mavenSettings);
 			SourceDownloadRunnable t = new SourceDownloadRunnable(s,
-					artifactDialog.getArtifact());
+					artifactDialog.getArtifact(), progressArea);
 			savedClass.saveObject(mavenSettings);
 			new Thread(t).start();
 		} catch (Exception ex) {
@@ -71,5 +72,21 @@ public class DownloadFrame extends JFrame implements ActionListener {
 		this.add(repoListDialog);
 		this.add(Box.createVerticalStrut(15));
 	}
-
+	
+	private void addProgressDisplayArea() {
+		JPanel logPanel = new JPanel(new FlowLayout());
+		this.progressArea.setLineWrap(true);
+		this.progressArea.setEditable(false);
+		logPanel.setBorder(BorderFactory.createTitledBorder("Maven source helper progress information"));
+		logPanel.add(new JScrollPane(this.progressArea));
+		this.add(logPanel);
+		this.add(Box.createVerticalStrut(15));
+	}
+	
+	private void addDownloadButton() {
+		this.add(download);
+		this.add(Box.createVerticalStrut(15));
+		download.addActionListener(this);
+	}
+	
 }
