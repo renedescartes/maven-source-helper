@@ -8,10 +8,8 @@
 <JVMSearchPath>jview</JVMSearchPath>
 <currentDirectory>${EXECUTABLEPATH}</currentDirectory>
 <embeddedJar>true</embeddedJar>
-<executableName>..\..\..\target\maven-source-helper.exe</executableName>
 <iconLocation>m2.png</iconLocation>
 <initialMemoryHeap>-1</initialMemoryHeap>
-<jarLocation>..\..\..\target\maven-source-helper-1.0-SNAPSHOT.jar</jarLocation>
 <mainClassName>com.ekanathk.maven.gui.ApplicationRunner</mainClassName>
 <maximumMemoryHeap>-1</maximumMemoryHeap>
 <maximumVersion></maximumVersion>
