@@ -10,19 +10,15 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 import com.ekanathk.maven.core.MavenSettings;
-import com.ekanathk.maven.core.SavedClass;
 import com.ekanathk.maven.core.SourceDownload;
 
 public class DownloadFrame extends JFrame implements ActionListener {
 
 	private JButton download = new JButton("Download");
 	private ArtifactDialog artifactDialog = new ArtifactDialog();
-	private JTextField localRepoField = new JTextField(mavenSettings
-			.getLocalRepositoryPath(), 40);
-	private RepoListDialog repoListDialog = new RepoListDialog(mavenSettings
-			.getRepositoryList());
-	private static SavedClass<MavenSettings> savedClass = new SavedClass<MavenSettings>(MavenSettings.class);
-	private static MavenSettings mavenSettings = savedClass.readObject();
+	private JTextField localRepoField;
+	private RepoListDialog repoListDialog;
+	private MavenSettings mavenSettings;
 	private JTextArea progressArea = new JTextArea(15, 80);
 	
 	public DownloadFrame() {
@@ -30,6 +26,7 @@ public class DownloadFrame extends JFrame implements ActionListener {
 		this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(900, 600);
+		initFields();
 		this.add(artifactDialog);
 		this.add(Box.createVerticalStrut(15));
 		addLocalRepoPanel();
@@ -48,13 +45,23 @@ public class DownloadFrame extends JFrame implements ActionListener {
 			SourceDownload s = new SourceDownload(mavenSettings);
 			SourceDownloadRunnable t = new SourceDownloadRunnable(s,
 					artifactDialog.getArtifact(), progressArea);
-			savedClass.saveObject(mavenSettings);
+			mavenSettings.saveConfig();
 			new Thread(t).start();
 		} catch (Exception ex) {
 			handleException(ex.getMessage());
 		}
 	}
 
+	private final void initFields() {
+		try {
+			mavenSettings = MavenSettings.readConfig();
+		} catch(Exception e) {
+			mavenSettings = new MavenSettings();
+		}
+		localRepoField = new JTextField(mavenSettings.getLocalRepositoryPath(), 40);
+		repoListDialog = new RepoListDialog(mavenSettings.getRepositoryList());
+	}
+	
 	private final void addLocalRepoPanel() {
 		JPanel localRepoPanel = new JPanel(new FlowLayout());
 		localRepoPanel.add(new JLabel("Local Repository Path"));
