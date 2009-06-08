@@ -1,5 +1,6 @@
 package com.ekanathk.maven.gui;
 
+import static com.ekanathk.maven.core.MavenSettings.CONFIG_FILE_NAME;
 import static com.ekanathk.maven.gui.SwingUtil.centerComponentOnScreen;
 import static com.ekanathk.maven.gui.SwingUtil.handleException;
 
@@ -54,12 +55,13 @@ public class DownloadFrame extends JFrame implements ActionListener {
 	}
 
 	private final void initFields() {
+		File configFile = new File(CONFIG_FILE_NAME);
 		try {
-			if(new File("MavenSettings.xml").exists()) {
+			if(configFile.exists()) {
 				mavenSettings = MavenSettings.readConfig();
 			}
 		} catch(Exception e) {
-			handleException("The file [MavenSettings.xml] could not be read. Will use defaults");
+			handleException("The file [" + configFile.getAbsolutePath() + "] could not be read/parsed. Will use defaults!!");
 		}
 		if(mavenSettings == null) {
 			mavenSettings = new MavenSettings();
