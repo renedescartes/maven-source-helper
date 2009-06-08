@@ -6,6 +6,7 @@ import static com.ekanathk.maven.gui.SwingUtil.handleException;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.*;
 
@@ -54,8 +55,13 @@ public class DownloadFrame extends JFrame implements ActionListener {
 
 	private final void initFields() {
 		try {
-			mavenSettings = MavenSettings.readConfig();
+			if(new File("MavenSettings.xml").exists()) {
+				mavenSettings = MavenSettings.readConfig();
+			}
 		} catch(Exception e) {
+			handleException("The file [MavenSettings.xml] could not be read. Will use defaults");
+		}
+		if(mavenSettings == null) {
 			mavenSettings = new MavenSettings();
 		}
 		localRepoField = new JTextField(mavenSettings.getLocalRepositoryPath(), 40);
