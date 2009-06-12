@@ -6,6 +6,7 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 public class SourceDownload {
@@ -59,7 +60,8 @@ public class SourceDownload {
 			}
 			log.info("The source jar is not found at [" + jarUrl + "]");
 		}
-		log.info("None of the repositories " + mavenSettings.getRepositoryList() + "contains a source artifact for [" + artifact + "]");
+		log.info("None of the repositories " + Arrays.toString(mavenSettings.getRepositoryList()) 
+				+ "contains a source artifact for [" + artifact + "]");
 		return false;
 	}
 
