@@ -17,7 +17,7 @@ public class IOUtil {
 	
 	public static String readFromFile(String fileName) {
 		try {
-	        BufferedReader in = new BufferedReader(new FileReader("infilename"));
+	        BufferedReader in = new BufferedReader(new FileReader(fileName));
 	        StringBuffer buffer = new StringBuffer();
 	        String str = null;
 	        while ((str = in.readLine()) != null) {

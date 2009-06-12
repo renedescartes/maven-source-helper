@@ -92,4 +92,10 @@ public abstract class CommonUtil {
             out.write(buf, 0, len);
         }
     }
+	
+	public static String trimBraces(String str) {
+		assertTrue(!isEmpty(str), "String for trimming cannot be empty");
+		return str.substring(1).substring(0, str.length()-2);
+	}
+	
 }
