@@ -1,0 +1,5 @@
+Have you ever had the trouble of trawling through multiple maven repositories looking for a -sources.jar for your strange library? You have to locate them, download them and copy them into the appropriate folder structure, then go to your eclipse project do a "mvn eclipse:eclipse" and again "Refresh" the projects in Eclipse. I have to frequently drill through the source code of many libraries and I find it very annoying.
+
+You can use the http://m2clipse.sourceforge.net but if you find that a pain (and at times it does not work), you can use this tool.
+
+Just download the exe "http://maven-source-helper.googlecode.com/files/maven-source-helper.exe" and run it (You need atleast 1.5+ JRE). You then have to run mvn eclipse:eclipse on your project and refresh the project again. I think it does a decent job but if you think you can make this tool do more, pull the source down and do whatever you want with it
